@@ -12,7 +12,7 @@
 
 # Loading percentages
 
-    
+```python
     import pickle
     
     italianpercs = open("italianpercs.pickle", "rb")
@@ -26,13 +26,13 @@
     
     moderndutchpercs = open("moderndutch.pickle", "rb")
     moderndutchpercs = pickle.load(moderndutchpercs)
-
+```
 
 <a id="org58b4948"></a>
 
 # Distributions
 
-    
+```python
     import pickle
     import seaborn as sns
     import matplotlib.pyplot as plt
@@ -60,14 +60,14 @@
     plt.legend()
     plt.savefig("plotto.png")
     return "./plotto.png"
-
+```
 ![img](./plotto.png)
 
 
 <a id="org29a1222"></a>
 
 # Shapiro Test
-
+```python
     import pickle
     from scipy import stats
     import pylab
@@ -100,7 +100,7 @@
     
     
     return results
-
+```
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -192,7 +192,7 @@
 
 # Welch T-Tests
 
-    
+```python 
     import pickle
     
     italianpercs = open("italianpercs.pickle", "rb")
@@ -218,20 +218,23 @@
     engmod = "ENG MOD:\t"+str(stats.ttest_ind(englishpercs, moderndutchpercs,equal_var=False)[1])
     
     return "\n".join([dutcheng, dutchita,dutchmod, italeng, italmod, engmod])
+```
 
+
+```
     DUTCH ENG:	5.066694424377665e-102
     DUTCH ITA:	1.2932607850490275e-28
     DUTCH MOD:	2.863753564928754e-14
     ITA ENG:	6.213336870606083e-44
     ITA MOD:	0.08231180463815092
     ENG MOD:	2.2751970524785925e-36
-
+```
 
 <a id="orgb404797"></a>
 
 # Mann Whitney U Test
 
-    
+```python    
     import pickle
     
     italianpercs = open("italianpercs.pickle", "rb")
@@ -257,11 +260,13 @@
     engmod = "ENG MOD:\t"+str(stats.mannwhitneyu(englishpercs, moderndutchpercs)[1])
     
     return "\n".join([dutcheng, dutchita,dutchmod, italeng, italmod, engmod])
+```
 
+```
     DUTCH ENG:	1.3717168636704838e-79
     DUTCH ITA:	5.88518398092256e-21
     DUTCH MOD:	6.18417694118659e-11
     ITA ENG:	1.4977812914162474e-49
     ITA MOD:	0.01887171365553699
     ENG MOD:	2.916518520191118e-50
-
+```
