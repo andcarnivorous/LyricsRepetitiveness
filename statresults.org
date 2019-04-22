@@ -1,0 +1,188 @@
+* Loading percentages
+
+#+name: lyrics
+#+begin_src python
+
+import pickle
+
+italianpercs = open("italianpercs.pickle", "rb")
+italianpercs = pickle.load(italianpercs)
+
+englishpercs = open("englishpercs.pickle", "rb")
+englishpercs = pickle.load(englishpercs)
+
+dutchpercs = open("dutchpercs.pickle", "rb")
+dutchpercs = pickle.load(dutchpercs)
+
+moderndutchpercs = open("moderndutch.pickle", "rb")
+moderndutchpercs = pickle.load(moderndutchpercs)
+
+
+#+end_src
+
+#+RESULTS: lyrics
+: None
+
+* Distributions
+
+#+begin_src python :results file :exports both
+
+    import pickle
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    italianpercs = open("italianpercs.pickle", "rb")
+    italianpercs = pickle.load(italianpercs)
+
+    englishpercs = open("englishpercs.pickle", "rb")
+    englishpercs = pickle.load(englishpercs)
+
+    dutchpercs = open("dutchpercs.pickle", "rb")
+    dutchpercs = pickle.load(dutchpercs)
+
+    moderndutchpercs = open("moderndutch.pickle", "rb")
+    moderndutchpercs = pickle.load(moderndutchpercs)
+
+    data = {"Italian" : italianpercs, 
+	    "English" : englishpercs,
+	    "Dutch" : dutchpercs,
+	    "modernDutch" : moderndutchpercs}
+
+    for x in data.items():
+      sns.distplot(x[1], label=x[0])
+    plt.savefig("plotto.png")
+    return "./plotto.png"
+
+#+end_src
+
+#+RESULTS:
+[[file:./plotto.png]]
+
+
+* Shapiro Test
+#+begin_src python :exports both
+  import pickle
+  from scipy import stats
+  import pylab
+  import matplotlib.pyplot as plt
+  italianpercs = open("italianpercs.pickle", "rb")
+  italianpercs = pickle.load(italianpercs)
+
+  englishpercs = open("englishpercs.pickle", "rb")
+  englishpercs = pickle.load(englishpercs)
+
+  dutchpercs = open("dutchpercs.pickle", "rb")
+  dutchpercs = pickle.load(dutchpercs)
+
+  moderndutchpercs = open("moderndutch.pickle", "rb")
+  moderndutchpercs = pickle.load(moderndutchpercs)
+
+  data = {"Italian" : italianpercs, 
+	  "English" : englishpercs,
+	  "Dutch" : dutchpercs,
+	  "modernDutch" : moderndutchpercs}
+
+  results = dict()
+
+  for x in data.items():
+    stats.probplot(x[1], dist="norm", plot=pylab)
+    plt.title(x[0])
+    plt.savefig("%sQQplot.png" % x[0])
+    plt.close("all")
+    results[x[0]] = stats.shapiro(x[1])[1]
+
+
+  return results
+#+end_src
+
+
+
+
+
+
+
+| Italian     | : |      0.420023113489151 |
+| English     | : |  3.952866822370328e-23 |
+| Dutch       | : |  3.278021409869325e-08 |
+| modernDutch | : | 2.2561225705430843e-05 |
+
+
+* Welch T-Tests
+
+#+begin_src python :exports both
+
+  import pickle
+
+  italianpercs = open("italianpercs.pickle", "rb")
+  italianpercs = pickle.load(italianpercs)
+
+  englishpercs = open("englishpercs.pickle", "rb")
+  englishpercs = pickle.load(englishpercs)
+
+  dutchpercs = open("dutchpercs.pickle", "rb")
+  dutchpercs = pickle.load(dutchpercs)
+
+  moderndutchpercs = open("moderndutch.pickle", "rb")
+  moderndutchpercs = pickle.load(moderndutchpercs)
+  import seaborn as sns
+  from scipy import stats
+  import pylab
+
+  dutcheng = "DUTCH ENG:\t"+str(stats.ttest_ind(dutchpercs, englishpercs, equal_var=False)[1])
+  dutchita = "DUTCH ITA:\t"+str(stats.ttest_ind(dutchpercs, italianpercs,equal_var=False)[1])
+  dutchmod = "DUTCH MOD:\t"+str(stats.ttest_ind(dutchpercs, moderndutchpercs,equal_var=False)[1])
+  italeng = "ITA ENG:\t"+str(stats.ttest_ind(italianpercs, englishpercs,equal_var=False)[1])
+  italmod = "ITA MOD:\t"+str(stats.ttest_ind(italianpercs, moderndutchpercs,equal_var=False)[1])
+  engmod = "ENG MOD:\t"+str(stats.ttest_ind(englishpercs, moderndutchpercs,equal_var=False)[1])
+
+  return "\n".join([dutcheng, dutchita,dutchmod, italeng, italmod, engmod])
+
+#+end_src
+
+#+RESULTS:
+: DUTCH ENG:	5.066694424377665e-102
+: DUTCH ITA:	1.2932607850490275e-28
+: DUTCH MOD:	2.863753564928754e-14
+: ITA ENG:	6.213336870606083e-44
+: ITA MOD:	0.08231180463815092
+: ENG MOD:	2.2751970524785925e-36
+
+* Mann Whitney U Test
+
+#+begin_src python :exports both
+
+  import pickle
+
+  italianpercs = open("italianpercs.pickle", "rb")
+  italianpercs = pickle.load(italianpercs)
+
+  englishpercs = open("englishpercs.pickle", "rb")
+  englishpercs = pickle.load(englishpercs)
+
+  dutchpercs = open("dutchpercs.pickle", "rb")
+  dutchpercs = pickle.load(dutchpercs)
+
+  moderndutchpercs = open("moderndutch.pickle", "rb")
+  moderndutchpercs = pickle.load(moderndutchpercs)
+  import seaborn as sns
+  from scipy import stats
+  import pylab
+
+  dutcheng = "DUTCH ENG:\t"+str(stats.mannwhitneyu(dutchpercs, englishpercs)[1])
+  dutchita = "DUTCH ITA:\t"+str(stats.mannwhitneyu(dutchpercs, italianpercs)[1])
+  dutchmod = "DUTCH MOD:\t"+str(stats.mannwhitneyu(dutchpercs, moderndutchpercs)[1])
+  italeng = "ITA ENG:\t"+str(stats.mannwhitneyu(italianpercs, englishpercs)[1])
+  italmod = "ITA MOD:\t"+str(stats.mannwhitneyu(italianpercs, moderndutchpercs)[1])
+  engmod = "ENG MOD:\t"+str(stats.mannwhitneyu(englishpercs, moderndutchpercs)[1])
+
+  return "\n".join([dutcheng, dutchita,dutchmod, italeng, italmod, engmod])
+
+#+end_src
+
+#+RESULTS:
+: DUTCH ENG:	1.3717168636704838e-79
+: DUTCH ITA:	5.88518398092256e-21
+: DUTCH MOD:	6.18417694118659e-11
+: ITA ENG:	1.4977812914162474e-49
+: ITA MOD:	0.01887171365553699
+: ENG MOD:	2.916518520191118e-50
