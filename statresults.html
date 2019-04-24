@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-22 ma 12:56 -->
+<!-- 2019-04-24 wo 12:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -233,19 +233,20 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgadc9d12">1. Loading percentages</a></li>
-<li><a href="#org793b326">2. Distributions</a></li>
-<li><a href="#org30ad566">3. Shapiro Test</a></li>
-<li><a href="#org554d568">4. Welch T-Tests</a></li>
-<li><a href="#org1bdf6a6">5. Mann Whitney U Test</a></li>
+<li><a href="#org8381ca5">1. Loading percentages</a></li>
+<li><a href="#orgf9e1d03">2. Distributions</a></li>
+<li><a href="#org23a4420">3. Shapiro Test</a></li>
+<li><a href="#org5fbb3fc">4. Welch T-Tests</a></li>
+<li><a href="#org023e2fc">5. Mann Whitney U Test</a></li>
+<li><a href="#org6a5680d">6. Anova</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgadc9d12" class="outline-2">
-<h2 id="orgadc9d12"><span class="section-number-2">1</span> Loading percentages</h2>
+<div id="outline-container-org8381ca5" class="outline-2">
+<h2 id="org8381ca5"><span class="section-number-2">1</span> Loading percentages</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
-<pre class="src src-python" id="org9db7945">
+<pre class="src src-python" id="org6cbc2e4">
 <span style="color: #fb4933;">import</span> pickle
 
 <span style="color: #83a598;">italianpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"italianpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
@@ -260,14 +261,17 @@ for the JavaScript code in this tag.
 <span style="color: #83a598;">moderndutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"moderndutch.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">moderndutchpercs</span> = pickle.load<span style="color: #458588;">(</span>moderndutchpercs<span style="color: #458588;">)</span>
 
+<span style="color: #83a598;">oldenglishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"oldenglishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldenglishpercs</span> = pickle.load<span style="color: #458588;">(</span>oldenglishpercs<span style="color: #458588;">)</span>
+
 
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org793b326" class="outline-2">
-<h2 id="org793b326"><span class="section-number-2">2</span> Distributions</h2>
+<div id="outline-container-orgf9e1d03" class="outline-2">
+<h2 id="orgf9e1d03"><span class="section-number-2">2</span> Distributions</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -287,14 +291,18 @@ for the JavaScript code in this tag.
 <span style="color: #83a598;">moderndutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"moderndutch.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">moderndutchpercs</span> = pickle.load<span style="color: #458588;">(</span>moderndutchpercs<span style="color: #458588;">)</span>
 
+<span style="color: #83a598;">oldenglishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"oldenglishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldenglishpercs</span> = pickle.load<span style="color: #458588;">(</span>oldenglishpercs<span style="color: #458588;">)</span>
+
+
 <span style="color: #83a598;">data</span> = <span style="color: #458588;">{</span><span style="color: #b8bb26;">"Italian"</span> : italianpercs, 
         <span style="color: #b8bb26;">"English"</span> : englishpercs,
         <span style="color: #b8bb26;">"Dutch"</span> : dutchpercs,
-        <span style="color: #b8bb26;">"modernDutch"</span> : moderndutchpercs<span style="color: #458588;">}</span>
+        <span style="color: #b8bb26;">"modernDutch"</span> : moderndutchpercs,
+        <span style="color: #b8bb26;">"oldEnglish"</span> : oldenglishpercs<span style="color: #458588;">}</span>
 
 <span style="color: #fb4933;">for</span> x <span style="color: #fb4933;">in</span> data.items<span style="color: #458588;">()</span>:
 <span style="background-color: #3c3836;"> </span> sns.distplot<span style="color: #458588;">(</span>x<span style="color: #b16286;">[</span>1<span style="color: #b16286;">]</span>, label=x<span style="color: #b16286;">[</span>0<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-
 plt.legend<span style="color: #458588;">()</span>
 plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"plotto.png"</span><span style="color: #458588;">)</span>
 <span style="color: #fb4933;">return</span> <span style="color: #b8bb26;">"./plotto.png"</span>
@@ -311,8 +319,8 @@ plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"
 </div>
 
 
-<div id="outline-container-org30ad566" class="outline-2">
-<h2 id="org30ad566"><span class="section-number-2">3</span> Shapiro Test</h2>
+<div id="outline-container-org23a4420" class="outline-2">
+<h2 id="org23a4420"><span class="section-number-2">3</span> Shapiro Test</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #fb4933;">import</span> pickle
@@ -331,10 +339,15 @@ plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"
 <span style="color: #83a598;">moderndutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"moderndutch.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">moderndutchpercs</span> = pickle.load<span style="color: #458588;">(</span>moderndutchpercs<span style="color: #458588;">)</span>
 
+<span style="color: #83a598;">oldenglishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"oldenglishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldenglishpercs</span> = pickle.load<span style="color: #458588;">(</span>oldenglishpercs<span style="color: #458588;">)</span>
+
+
 <span style="color: #83a598;">data</span> = <span style="color: #458588;">{</span><span style="color: #b8bb26;">"Italian"</span> : italianpercs, 
         <span style="color: #b8bb26;">"English"</span> : englishpercs,
         <span style="color: #b8bb26;">"Dutch"</span> : dutchpercs,
-        <span style="color: #b8bb26;">"modernDutch"</span> : moderndutchpercs<span style="color: #458588;">}</span>
+        <span style="color: #b8bb26;">"modernDutch"</span> : moderndutchpercs,
+        <span style="color: #b8bb26;">"OldEng"</span> : oldenglishpercs<span style="color: #458588;">}</span>
 
 <span style="color: #83a598;">results</span> = <span style="color: #fe8019;">dict</span><span style="color: #458588;">()</span>
 
@@ -377,35 +390,7 @@ plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"
 <col  class="org-left" />
 
 <col  class="org-right" />
-</colgroup>
-<tbody>
-<tr>
-<td class="org-left">Italian</td>
-<td class="org-left">:</td>
-<td class="org-right">0.420023113489151</td>
-<td class="org-left">English</td>
-<td class="org-left">:</td>
-<td class="org-right">3.952866822370328e-23</td>
-<td class="org-left">Dutch</td>
-<td class="org-left">:</td>
-<td class="org-right">3.278021409869325e-08</td>
-<td class="org-left">modernDutch</td>
-<td class="org-left">:</td>
-<td class="org-right">2.2561225705430843e-05</td>
-</tr>
-</tbody>
-</table>
 
-
-
-
-
-
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
 <col  class="org-left" />
 
 <col  class="org-left" />
@@ -417,24 +402,18 @@ plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"
 <td class="org-left">Italian</td>
 <td class="org-left">:</td>
 <td class="org-right">0.420023113489151</td>
-</tr>
-
-<tr>
 <td class="org-left">English</td>
 <td class="org-left">:</td>
 <td class="org-right">3.952866822370328e-23</td>
-</tr>
-
-<tr>
 <td class="org-left">Dutch</td>
 <td class="org-left">:</td>
 <td class="org-right">3.278021409869325e-08</td>
-</tr>
-
-<tr>
 <td class="org-left">modernDutch</td>
 <td class="org-left">:</td>
 <td class="org-right">2.2561225705430843e-05</td>
+<td class="org-left">OldEng</td>
+<td class="org-left">:</td>
+<td class="org-right">2.797007780941385e-08</td>
 </tr>
 </tbody>
 </table>
@@ -442,8 +421,14 @@ plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"
 </div>
 
 
-<div id="outline-container-org554d568" class="outline-2">
-<h2 id="org554d568"><span class="section-number-2">4</span> Welch T-Tests</h2>
+
+
+
+
+
+
+<div id="outline-container-org5fbb3fc" class="outline-2">
+<h2 id="org5fbb3fc"><span class="section-number-2">4</span> Welch T-Tests</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -460,36 +445,47 @@ plt.savefig<span style="color: #458588;">(</span><span style="color: #b8bb26;">"
 
 <span style="color: #83a598;">moderndutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"moderndutch.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">moderndutchpercs</span> = pickle.load<span style="color: #458588;">(</span>moderndutchpercs<span style="color: #458588;">)</span>
+
+<span style="color: #83a598;">oldenglishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"oldenglishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldenglishpercs</span> = pickle.load<span style="color: #458588;">(</span>oldenglishpercs<span style="color: #458588;">)</span>
+
 <span style="color: #fb4933;">import</span> seaborn <span style="color: #fb4933;">as</span> sns
 <span style="color: #fb4933;">from</span> scipy <span style="color: #fb4933;">import</span> stats
 <span style="color: #fb4933;">import</span> pylab
 
-<span style="color: #83a598;">dutcheng</span> = <span style="color: #b8bb26;">"DUTCH ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>dutchpercs, englishpercs, equal_var=<span style="color: #d3869b;">False</span><span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">dutchita</span> = <span style="color: #b8bb26;">"DUTCH ITA:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>dutchpercs, italianpercs,equal_var=<span style="color: #d3869b;">False</span><span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">dutchmod</span> = <span style="color: #b8bb26;">"DUTCH MOD:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>dutchpercs, moderndutchpercs,equal_var=<span style="color: #d3869b;">False</span><span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">italeng</span> = <span style="color: #b8bb26;">"ITA ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>italianpercs, englishpercs,equal_var=<span style="color: #d3869b;">False</span><span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">italmod</span> = <span style="color: #b8bb26;">"ITA MOD:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>italianpercs, moderndutchpercs,equal_var=<span style="color: #d3869b;">False</span><span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">engmod</span> = <span style="color: #b8bb26;">"ENG MOD:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>englishpercs, moderndutchpercs,equal_var=<span style="color: #d3869b;">False</span><span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">dutcheng</span> = <span style="color: #b8bb26;">"DUTCH ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>dutchpercs, englishpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">dutchita</span> = <span style="color: #b8bb26;">"DUTCH ITA:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>dutchpercs, italianpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">dutchmod</span> = <span style="color: #b8bb26;">"DUTCH MODDutch:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>dutchpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">italeng</span> = <span style="color: #b8bb26;">"ITA ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>italianpercs, englishpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">italmod</span> = <span style="color: #b8bb26;">"ITA MODDutch:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>italianpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">engmod</span> = <span style="color: #b8bb26;">"ENG MODDutch:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>englishpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengdutch</span> = <span style="color: #b8bb26;">"OLDENG DUTCH:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>oldenglishpercs, dutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengmod</span> = <span style="color: #b8bb26;">"OLDENG MODDutch:"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>oldenglishpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengital</span> = <span style="color: #b8bb26;">"OLDENG ITA:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>oldenglishpercs, italianpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengeng</span> = <span style="color: #b8bb26;">"OLDENG ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.ttest_ind<span style="color: #b16286;">(</span>oldenglishpercs, englishpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
 
-<span style="color: #fb4933;">return</span> <span style="color: #b8bb26;">"\n"</span>.join<span style="color: #458588;">(</span><span style="color: #b16286;">[</span>dutcheng, dutchita,dutchmod, italeng, italmod, engmod<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #fb4933;">return</span> <span style="color: #b8bb26;">"\n"</span>.join<span style="color: #458588;">(</span><span style="color: #b16286;">[</span>dutcheng, dutchita,dutchmod, italeng, italmod, engmod, oldengdutch, oldengmod, oldengital,oldengeng<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
 
 </pre>
 </div>
 
 <pre class="example">
-DUTCH ENG:	5.066694424377665e-102
-DUTCH ITA:	1.2932607850490275e-28
-DUTCH MOD:	2.863753564928754e-14
-ITA ENG:	6.213336870606083e-44
-ITA MOD:	0.08231180463815092
-ENG MOD:	2.2751970524785925e-36
-
+DUTCH ENG:	1.4356427109517667e-81
+DUTCH ITA:	2.9341870715988103e-18
+DUTCH MODDutch:	1.1591052795152356e-09
+ITA ENG:	5.076797349634289e-52
+ITA MODDutch:	0.07694328188116538
+ENG MODDutch:	6.561047780002253e-58
+OLDENG DUTCH:	3.4796258286786167e-59
+OLDENG MODDutch:7.4986282747156e-90
+OLDENG ITA:	4.490154633877362e-125
+OLDENG ENG:	0.0
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org1bdf6a6" class="outline-2">
-<h2 id="org1bdf6a6"><span class="section-number-2">5</span> Mann Whitney U Test</h2>
+<div id="outline-container-org023e2fc" class="outline-2">
+<h2 id="org023e2fc"><span class="section-number-2">5</span> Mann Whitney U Test</h2>
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -506,18 +502,27 @@ ENG MOD:	2.2751970524785925e-36
 
 <span style="color: #83a598;">moderndutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"moderndutch.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">moderndutchpercs</span> = pickle.load<span style="color: #458588;">(</span>moderndutchpercs<span style="color: #458588;">)</span>
+
+<span style="color: #83a598;">oldenglishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"oldenglishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldenglishpercs</span> = pickle.load<span style="color: #458588;">(</span>oldenglishpercs<span style="color: #458588;">)</span>
+
+
 <span style="color: #fb4933;">import</span> seaborn <span style="color: #fb4933;">as</span> sns
 <span style="color: #fb4933;">from</span> scipy <span style="color: #fb4933;">import</span> stats
 <span style="color: #fb4933;">import</span> pylab
 
 <span style="color: #83a598;">dutcheng</span> = <span style="color: #b8bb26;">"DUTCH ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>dutchpercs, englishpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">dutchita</span> = <span style="color: #b8bb26;">"DUTCH ITA:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>dutchpercs, italianpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">dutchmod</span> = <span style="color: #b8bb26;">"DUTCH MOD:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>dutchpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">dutchmod</span> = <span style="color: #b8bb26;">"DUTCH MODDutch:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>dutchpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
 <span style="color: #83a598;">italeng</span> = <span style="color: #b8bb26;">"ITA ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>italianpercs, englishpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">italmod</span> = <span style="color: #b8bb26;">"ITA MOD:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>italianpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
-<span style="color: #83a598;">engmod</span> = <span style="color: #b8bb26;">"ENG MOD:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>englishpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">italmod</span> = <span style="color: #b8bb26;">"ITA MODDutch:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>italianpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">engmod</span> = <span style="color: #b8bb26;">"ENG MODDutch:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>englishpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengdutch</span> = <span style="color: #b8bb26;">"OLDENG DUTCH:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>oldenglishpercs, dutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengmod</span> = <span style="color: #b8bb26;">"OLDENG MODDutch:"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>oldenglishpercs, moderndutchpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengital</span> = <span style="color: #b8bb26;">"OLDENG ITA:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>oldenglishpercs, italianpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldengeng</span> = <span style="color: #b8bb26;">"OLDENG ENG:\t"</span>+<span style="color: #fe8019;">str</span><span style="color: #458588;">(</span>stats.mannwhitneyu<span style="color: #b16286;">(</span>oldenglishpercs, englishpercs<span style="color: #b16286;">)[</span>1<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
 
-<span style="color: #fb4933;">return</span> <span style="color: #b8bb26;">"\n"</span>.join<span style="color: #458588;">(</span><span style="color: #b16286;">[</span>dutcheng, dutchita,dutchmod, italeng, italmod, engmod<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
+<span style="color: #fb4933;">return</span> <span style="color: #b8bb26;">"\n"</span>.join<span style="color: #458588;">(</span><span style="color: #b16286;">[</span>dutcheng, dutchita,dutchmod, italeng, italmod, engmod, oldengdutch, oldengmod, oldengital,oldengeng<span style="color: #b16286;">]</span><span style="color: #458588;">)</span>
 
 </pre>
 </div>
@@ -525,10 +530,51 @@ ENG MOD:	2.2751970524785925e-36
 <pre class="example">
 DUTCH ENG:	1.3717168636704838e-79
 DUTCH ITA:	5.88518398092256e-21
-DUTCH MOD:	6.18417694118659e-11
+DUTCH MODDutch:	6.18417694118659e-11
 ITA ENG:	1.4977812914162474e-49
-ITA MOD:	0.01887171365553699
-ENG MOD:	2.916518520191118e-50
+ITA MODDutch:	0.01887171365553699
+ENG MODDutch:	2.916518520191118e-50
+OLDENG DUTCH:	3.794422495362001e-61
+OLDENG MODDutch:9.054563863042377e-82
+OLDENG ITA:	4.507989481863868e-99
+OLDENG ENG:	7.86121871245955e-176
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6a5680d" class="outline-2">
+<h2 id="org6a5680d"><span class="section-number-2">6</span> Anova</h2>
+<div class="outline-text-2" id="text-6">
+<div class="org-src-container">
+<pre class="src src-python">
+<span style="color: #fb4933;">import</span> pickle
+
+<span style="color: #83a598;">italianpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"italianpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">italianpercs</span> = pickle.load<span style="color: #458588;">(</span>italianpercs<span style="color: #458588;">)</span>
+
+<span style="color: #83a598;">englishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"englishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">englishpercs</span> = pickle.load<span style="color: #458588;">(</span>englishpercs<span style="color: #458588;">)</span>
+
+<span style="color: #83a598;">dutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"dutchpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">dutchpercs</span> = pickle.load<span style="color: #458588;">(</span>dutchpercs<span style="color: #458588;">)</span>
+
+<span style="color: #83a598;">moderndutchpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"moderndutch.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">moderndutchpercs</span> = pickle.load<span style="color: #458588;">(</span>moderndutchpercs<span style="color: #458588;">)</span>
+
+<span style="color: #83a598;">oldenglishpercs</span> = <span style="color: #fe8019;">open</span><span style="color: #458588;">(</span><span style="color: #b8bb26;">"oldenglishpercs.pickle"</span>, <span style="color: #b8bb26;">"rb"</span><span style="color: #458588;">)</span>
+<span style="color: #83a598;">oldenglishpercs</span> = pickle.load<span style="color: #458588;">(</span>oldenglishpercs<span style="color: #458588;">)</span>
+
+<span style="color: #fb4933;">import</span> seaborn <span style="color: #fb4933;">as</span> sns
+<span style="color: #fb4933;">from</span> scipy <span style="color: #fb4933;">import</span> stats
+<span style="color: #fb4933;">import</span> pylab
+
+<span style="color: #fb4933;">return</span> stats.f_oneway<span style="color: #458588;">(</span>dutchpercs, italianpercs, moderndutchpercs, englishpercs, oldenglishpercs<span style="color: #458588;">)</span>
+
+</pre>
+</div>
+
+<pre class="example">
+F_onewayResult(statistic=750.1551965115311, pvalue=0.0)
 
 </pre>
 </div>
@@ -536,7 +582,7 @@ ENG MOD:	2.916518520191118e-50
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: main</p>
-<p class="date">Created: 2019-04-22 ma 12:56</p>
+<p class="date">Created: 2019-04-24 wo 12:47</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
